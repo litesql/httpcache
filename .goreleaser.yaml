@@ -1,0 +1,82 @@
+# vim: set ts=2 sw=2 tw=0 fo=cnqoj
+
+version: 2
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: httpcache
+    binary: httpcache
+    buildmode: "c-shared"
+    flags:
+      - -tags=zig
+    ldflags:
+    - -s -w -X github.com/litesql/httpcache/extension.version={{.Version}} -X github.com/litesql/httpcache/extension.commit={{.Commit}} -X github.com/litesql/httpcache/extension.date={{.Date}}
+    goos:
+      - linux
+    goarch:
+      - amd64
+    env:
+      - CGO_ENABLED=1
+      - CC=zig cc -target x86_64-linux-gnu
+
+  - id: httpcache_windows
+    binary: httpcache
+    buildmode: "c-shared"
+    flags:
+      - -tags=zig
+    ldflags:
+    - -s -w -X github.com/litesql/httpcache/extension.version={{.Version}} -X github.com/litesql/httpcache/extension.commit={{.Commit}} -X github.com/litesql/httpcache/extension.date={{.Date}}
+    goos:
+      - windows
+    goarch:
+      - amd64
+    env:
+      - CGO_ENABLED=1
+      - CC=zig cc -target x86_64-windows
+
+  - id: httpcache_darwin
+    binary: httpcache
+    buildmode: "c-shared"
+    ldflags:
+    - -s -w -X github.com/litesql/httpcache/extension.version={{.Version}} -X github.com/litesql/httpcache/extension.commit={{.Commit}} -X github.com/litesql/httpcache/extension.date={{.Date}}
+    goos:
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    env:
+      - CGO_ENABLED=1
+      - CC=o64-clang
+
+archives:
+  - id: httpcache
+    formats: [tar.gz]
+    ids: [httpcache, httpcache_windows, httpcache_darwin]
+    # this name template makes the OS and Arch compatible with the results of `uname`.
+    name_template: >-
+      httpcache_v
+      {{- .Version }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    # use zip for windows archives
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files:
+      - none*
+  
+changelog:
+  disable: true
+
+release:  
+  github:
+    owner: litesql
+    name: httpcache
+
+  draft: false

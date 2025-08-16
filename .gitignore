@@ -1,0 +1,11 @@
+*.so
+*.dll
+*.dylib
+*.db
+*.db-shm
+*.db-wal
+httpcache.so
+httpcache.h
+
+# Added by goreleaser init:
+dist/
