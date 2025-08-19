@@ -46,7 +46,7 @@ func (vt *RequestVirtualTable) BestIndex(in *sqlite.IndexInfoInput) (*sqlite.Ind
 }
 
 func (vt *RequestVirtualTable) Open() (sqlite.VirtualCursor, error) {
-	return nil, fmt.Errorf("SELECT operations on %q is not supported, exec SELECT on %q table", vt.tableName, vt.responseTableName)
+	return nil, fmt.Errorf("SELECT operations on %q are not supported, exec SELECT on %q table", vt.tableName, vt.responseTableName)
 }
 
 func (vt *RequestVirtualTable) Disconnect() error {
@@ -112,13 +112,13 @@ func (vt *RequestVirtualTable) Insert(values ...sqlite.Value) (int64, error) {
 }
 
 func (vt *RequestVirtualTable) Update(_ sqlite.Value, _ ...sqlite.Value) error {
-	return fmt.Errorf("UPDATE operations on %q is not supported", vt.tableName)
+	return fmt.Errorf("UPDATE operations on %q are not supported", vt.tableName)
 }
 
 func (vt *RequestVirtualTable) Replace(old sqlite.Value, new sqlite.Value, _ ...sqlite.Value) error {
-	return fmt.Errorf("UPDATE operations on %q is not supported", vt.tableName)
+	return fmt.Errorf("UPDATE operations on %q are not supported", vt.tableName)
 }
 
 func (vt *RequestVirtualTable) Delete(_ sqlite.Value) error {
-	return fmt.Errorf("DELETE operations on %q is not supported", vt.tableName)
+	return fmt.Errorf("DELETE operations on %q are not supported", vt.tableName)
 }

@@ -22,6 +22,21 @@ builds:
       - CGO_ENABLED=1
       - CC=zig cc -target x86_64-linux-gnu
 
+  - id: httpcache_linux_arm64
+    binary: httpcache
+    buildmode: "c-shared"
+    flags:
+      - -tags=zig
+    ldflags:
+    - -s -w -X github.com/litesql/httpcache/extension.version={{.Version}} -X github.com/litesql/httpcache/extension.commit={{.Commit}} -X github.com/litesql/httpcache/extension.date={{.Date}}
+    goos:
+      - linux
+    goarch:
+      - arm64
+    env:
+      - CGO_ENABLED=1
+      - CC=zig cc -target aarch64-linux-gnu
+
   - id: httpcache_windows
     binary: httpcache
     buildmode: "c-shared"
@@ -54,7 +69,7 @@ builds:
 archives:
   - id: httpcache
     formats: [tar.gz]
-    ids: [httpcache, httpcache_windows, httpcache_darwin]
+    ids: [httpcache, httpcache_linux_arm64, httpcache_windows, httpcache_darwin]
     # this name template makes the OS and Arch compatible with the results of `uname`.
     name_template: >-
       httpcache_v
